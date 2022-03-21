@@ -1,34 +1,110 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# nextjs + eslint + prettier 설정
 
-## Getting Started
+# 설치
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
+```jsx
+4588  npx eslint --init
+4589  npm install --save-dev prettier eslint-config-prettier eslint-plugin-prettier
+4583  npm i styled-components
+4584  npm i @types/styled-components -D
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# package.json 설정파일 정보
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```jsx
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+{
+  "name": "nextts-app-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.3",
+    "styled-reset": "^4.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.21",
+    "@types/react": "17.0.41",
+    "@types/styled-components": "^5.1.24",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "8.11.0",
+    "eslint-config-next": "12.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "prettier": "^2.6.0",
+    "typescript": "4.6.2"
+  }
+}
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# .eslintrc.js
 
-## Learn More
+```jsx
+// eslint + prettier 설정 한방에 : https://www.kenrhee.com/blog/eslint-and-prettier-for-nextjs
+module.exports = {
+  env: {
+    // 전역 변수 사용을 정의합니다. 추가하지 않으면 ESLint 규칙에 걸리게 됩니다.
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended', // 해당 플러그인의 권장 규칙을 사용합니다.
+    'plugin:prettier/recommended', // plugin과 eslint-config-prettier 설정을 한번에 합니다.
+  ],
+  parser: '@typescript-eslint/parser', // ESLint 파서를 지정합니다.
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true, // JSX를 파싱할 수 있습니다.
+    },
+    ecmaVersion: 12, // Modern ECMAScript를 파싱할 수 있습니다.
+    sourceType: 'module', // import, export를 사용할 수 있습니다.
+  },
+  plugins: ['react', '@typescript-eslint'],
+  rules: {
+    // ESLint 규칙을 지정합니다. extends에서 지정된 규칙을 덮어 쓸수도 있습니다.
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect', // 현재 사용하고 있는 react 버전을 eslint-plugin-react가 자동으로 감지합니다.
+    },
+  },
+};
+```
 
-To learn more about Next.js, take a look at the following resources:
+# .prettierrc.js
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```jsx
+module.exports = {
+  semi: true,
+  trailingComma: 'all',
+  singleQuote: true,
+  printWidth: 160,
+  tabWidth: 2,
+};
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# .babelrc
 
-## Deploy on Vercel
+```jsx
+{
+    "presets": ["next/babel"],
+    "plugins": [["styled-components", {"ssr": true }]]
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# tsconfig.json
